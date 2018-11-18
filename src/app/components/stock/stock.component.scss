@@ -1,0 +1,23 @@
+
+@mixin text-style($weight, $color) {
+    font-weight: $weight;
+    color: $color;
+}
+
+.name {
+    margin-bottom: 2px;
+    @include text-style(500, #33a2ff);
+}
+
+.value {
+    @include text-style(500, black);
+}
+
+.trend {
+    font-size: .8rem;
+    @include text-style(500, green);
+    
+    &.neggative {
+        color: red;
+    }
+}
