@@ -1,4 +1,17 @@
 
+.stock {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 0 15px 0px #ccc;
+    margin-bottom: 10px;
+}
+
+.details, 
+.chart {
+    margin: 5px;
+}
+
 @mixin text-style($weight, $color) {
     font-weight: $weight;
     color: $color;
@@ -15,6 +28,7 @@
 
 .trend {
     font-size: .8rem;
+    white-space: nowrap;
     @include text-style(500, green);
     
     &.neggative {
