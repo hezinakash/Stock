@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -7,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./stock.component.scss']
 })
 export class StockComponent implements OnInit {
+// tslint:disable-next-line:no-input-rename
+@Input('symbol') symbol: string;
 
   value: number;
   name: string;
-  symbol: string;
   trend: number;
   precent: number;
   // chart: TODO
