@@ -3,7 +3,8 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px;
-    box-shadow: 0 0 10px 0px #727171;
+    -webkit-box-shadow: 0 0 10px 0px #727171;
+            box-shadow: 0 0 10px 0px #727171;
     margin-bottom: 10px;
     background: #dcdcdc;
 }
