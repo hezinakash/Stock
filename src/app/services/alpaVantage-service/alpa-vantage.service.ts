@@ -1,3 +1,4 @@
+import { Intraday, StockHistoryModule } from './../../modules/stock-history/stock-history/stock-history.module';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -26,5 +27,14 @@ export class AlpaVantageService {
                     .pipe(
                       map((res: GlobalQuote) =>  new StockStatusModule(res['Global Quote'])                      )
                       );
+  }
+
+  getHistory(symbol: string) {
+    // tslint:disable-next-line:max-line-length
+    const historyUrl = `${this.queryUrl}function=${this.history_function}&symbol=${symbol}&interval=${this.history_interval}&apikey=${this.key}`;
+
+    this.http.get<Intraday>(historyUrl)
+              .subscribe(res => new StockHistoryModule(res));
+
   }
 }

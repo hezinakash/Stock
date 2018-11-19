@@ -38,6 +38,7 @@ export class StockComponent implements OnInit {
       this.precent = stock.change_percent;
     });
 
+    this.service.getHistory(this.symbol);
   }
 
   calcTrendPrec() {
