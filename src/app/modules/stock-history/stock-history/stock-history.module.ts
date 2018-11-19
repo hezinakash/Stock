@@ -40,11 +40,12 @@ export class StockHistoryModule {
   constructor(@Inject('intraday') intraday: Intraday) {
     this.timeSeriesMap = new Map<string, StockDetails>();
     this.createHistoryMap(intraday);
-    console.log(this.timeSeriesMap);
   }
 
   createHistoryMap(intraday: Intraday) {
-    if (intraday && intraday[META_DATA]) {
+    console.log(intraday);
+    
+    if (intraday && intraday[META_DATA] && intraday[TIME_SERIES]) {
       const lastDateStr = intraday[META_DATA]['3. Last Refreshed'];
       const lastDate = new Date(lastDateStr);
       this.fillMap(intraday, lastDate);

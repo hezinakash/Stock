@@ -1,4 +1,4 @@
-import { StockDetails, Intraday } from './../../modules/stock-history/stock-history/stock-history.module';
+import { StockDetails } from './../../modules/stock-history/stock-history/stock-history.module';
 import { StockStatusModule } from 'src/app/modules/stock-status/stock-status/stock-status.module';
 import { AlpaVantageService } from './../../services/alpaVantage-service/alpa-vantage.service';
 import { Component, OnInit, Input } from '@angular/core';
@@ -42,7 +42,10 @@ export class StockComponent implements OnInit {
       switchMap(() => this.service.getStatus(this.symbol))
     );
 
-    this.status_interval.subscribe(stock => this.updateStockStatus(stock));
+    this.status_interval.subscribe(stock => 
+      this.updateStockStatus(stock),
+      err => console.log(err)
+      );
   }
 
   updateStockStatus(update: StockStatusModule) {
@@ -57,7 +60,10 @@ export class StockComponent implements OnInit {
       switchMap(() => this.service.getHistory(this.symbol))
     );
 
-    this.history_interval.subscribe(history => this.updateChart(history));
+    this.history_interval.subscribe(
+      history => this.updateChart(history),
+      err => console.log(err)
+      );
   }
 
   updateChart(history: StockHistoryModule) {
@@ -98,8 +104,10 @@ export class StockComponent implements OnInit {
     const details = [];
 
     history.timeSeriesMap.forEach((data: StockDetails, timeStamp: string) => {
-      const date = new Date(timeStamp);
+      if (timeStamp && data) {
+        const date = new Date(timeStamp);
       details.push([date.getTime(), +data['4. close']]);
+      }
     });
 
     return details;

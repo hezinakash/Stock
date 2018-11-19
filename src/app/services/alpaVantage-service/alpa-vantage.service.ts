@@ -1,7 +1,7 @@
 import { Intraday, StockHistoryModule } from './../../modules/stock-history/stock-history/stock-history.module';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, retry } from 'rxjs/operators';
 import { StockStatusModule, GlobalQuote } from 'src/app/modules/stock-status/stock-status/stock-status.module';
 import { Observable } from 'rxjs';
 
@@ -26,7 +26,14 @@ export class AlpaVantageService {
 
     return this.http.get<GlobalQuote>(statusUrl)
                     .pipe(
-                      map((res: GlobalQuote) =>  new StockStatusModule(res['Global Quote']))
+                      map((res: GlobalQuote) => {
+                        if (!(res && res['Global Quote']) {
+                        throw new Error(res['Note']);
+                        } else {
+                          return new StockStatusModule(res['Global Quote']);
+                        }
+                      }),
+                      retry(2)
                       );
   }
 
@@ -35,7 +42,14 @@ export class AlpaVantageService {
     const historyUrl = `${this.queryUrl}function=${HISTORY_FUNC}&symbol=${symbol}&interval=${this.history_interval}&apikey=${API_KEY}`;
 
     return this.http.get<Intraday>(historyUrl).pipe(
-                    map((res: Intraday) =>  new StockHistoryModule(res))
-      );
+                    map((res: Intraday) =>  {
+                        if (res['Note']) {
+                          throw new Error(res['Note']);
+                        } else {
+                          return new StockHistoryModule(res);
+                        }
+                    }),
+                    retry(2)
+                  );
   }
 }
