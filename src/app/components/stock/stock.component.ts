@@ -1,4 +1,5 @@
-import { AlpaVantageService, GlobalQuote, StockObj } from './../../services/alpaVantage-service/alpa-vantage.service';
+import { StockStatusModule } from 'src/app/modules/stock-status/stock-status/stock-status.module';
+import { AlpaVantageService } from './../../services/alpaVantage-service/alpa-vantage.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { interval, Observable } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
@@ -19,7 +20,7 @@ export class StockComponent implements OnInit {
   trend: number;
   precent: number;
   // chart: TODO
-  interval: Observable<StockObj>;
+  interval: Observable<StockStatusModule>;
 
   constructor(private service: AlpaVantageService) {
    }
@@ -28,7 +29,7 @@ export class StockComponent implements OnInit {
     this.interval = interval(36000)
     .pipe(
       startWith(0),
-      switchMap(() => this.service.getStock(this.symbol))
+      switchMap(() => this.service.getStatus(this.symbol))
     );
 
     this.interval.subscribe(stock => {

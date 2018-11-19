@@ -15,7 +15,7 @@ import { StockComponent } from './components/stock/stock.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [ AlpaVantageService ],
   bootstrap: [AppComponent]
