@@ -30,30 +30,33 @@ const META_DATA = 'Meta Data';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule
-  ]
+  imports: [CommonModule]
 })
 export class StockHistoryModule {
-
   timeSeriesMap: Map<string, StockDetails>;
 
   constructor(intraday: Intraday) {
-
     this.timeSeriesMap = new Map<string, StockDetails>();
-    this.fillMap(intraday);
+    this.createHistoryMap(intraday);
     console.log(this.timeSeriesMap);
-
   }
 
-  fillMap(intraday: Intraday) {
-    const lastDateStr = intraday[META_DATA]['3. Last Refreshed'];
-    const lastDate = new Date(lastDateStr);
+  createHistoryMap(intraday: Intraday) {
+    if (intraday) {
+      const lastDateStr = intraday[META_DATA]['3. Last Refreshed'];
+      const lastDate = new Date(lastDateStr);
+      this.fillMap(intraday, lastDate);
+    }
+  }
 
+  fillMap(intraday: Intraday, lastDate: Date) {
     for (let hour = LAST_HOURS; hour > 0; hour--) {
-        const timeStemp = new Date(lastDate.getTime() - hour * ONE_HOUR);
-        const timeByFormat = this.getTimeByFormat(timeStemp);
-        this.timeSeriesMap.set(timeByFormat, intraday[TIME_SERIES][timeByFormat]);
+      const timeStamp = new Date(lastDate.getTime() - hour * ONE_HOUR);
+      const timeByFormat = this.getTimeByFormat(timeStamp);
+      this.timeSeriesMap.set(
+        timeByFormat,
+        intraday[TIME_SERIES][timeByFormat]
+      );
     }
   }
 

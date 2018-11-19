@@ -12,6 +12,10 @@
     margin: 5px;
 }
 
+.chart {
+    margin-left: auto;
+}
+
 @mixin text-style($weight, $color) {
     font-weight: $weight;
     color: $color;
@@ -24,6 +28,7 @@
 
 .value {
     @include text-style(500, black);
+    margin-top: auto;
 }
 
 .trend {
