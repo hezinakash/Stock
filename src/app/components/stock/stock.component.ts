@@ -67,7 +67,7 @@ export class StockComponent implements OnInit {
       chart: {
         zoomType: 'x',
         height: '65%',
-        width: 150
+        width: 130
       },
       xAxis: {
         type: 'datetime',
@@ -87,7 +87,7 @@ export class StockComponent implements OnInit {
       },
       series: [
         {
-          name: 'rate',
+          name: 'Rate',
           data: details
         }
       ]

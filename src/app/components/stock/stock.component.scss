@@ -3,8 +3,9 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px;
-    box-shadow: 0 0 15px 0px #ccc;
+    box-shadow: 0 0 10px 0px #727171;
     margin-bottom: 10px;
+    background: #dcdcdc;
 }
 
 .details, 
@@ -24,15 +25,17 @@
 .name {
     margin-bottom: 2px;
     @include text-style(500, #33a2ff);
+    font-size: .9rem;
 }
 
 .value {
     @include text-style(500, black);
     margin-top: auto;
+    font-size: .8rem;
 }
 
 .trend {
-    font-size: .8rem;
+    font-size: .75rem;
     white-space: nowrap;
     @include text-style(500, green);
     

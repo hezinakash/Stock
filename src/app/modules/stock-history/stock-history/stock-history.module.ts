@@ -42,7 +42,7 @@ export class StockHistoryModule {
   }
 
   createHistoryMap(intraday: Intraday) {
-    if (intraday) {
+    if (intraday && intraday[META_DATA]) {
       const lastDateStr = intraday[META_DATA]['3. Last Refreshed'];
       const lastDate = new Date(lastDateStr);
       this.fillMap(intraday, lastDate);
