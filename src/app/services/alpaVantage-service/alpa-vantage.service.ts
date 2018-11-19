@@ -27,7 +27,7 @@ export class AlpaVantageService {
     return this.http.get<GlobalQuote>(statusUrl)
                     .pipe(
                       map((res: GlobalQuote) => {
-                        if (!(res && res['Global Quote']) {
+                        if (!(res && res['Global Quote'])) {
                         throw new Error(res['Note']);
                         } else {
                           return new StockStatusModule(res['Global Quote']);
