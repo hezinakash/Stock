@@ -19,17 +19,17 @@ export function highchartsModules() {
 @NgModule({
   declarations: [
     AppComponent,
-    StockComponent
+    StockComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ChartModule
+    ChartModule,
   ],
-  providers: [ 
+  providers: [
     AlpaVantageService,
-    { provide: HIGHCHARTS_MODULES, useFactory: highchartsModules }
+    { provide: HIGHCHARTS_MODULES, useFactory: highchartsModules },
    ],
   bootstrap: [AppComponent]
 })

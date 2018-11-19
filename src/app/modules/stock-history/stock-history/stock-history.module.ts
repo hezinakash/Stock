@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface MetaData {
@@ -32,10 +32,12 @@ const META_DATA = 'Meta Data';
   declarations: [],
   imports: [CommonModule]
 })
+
+
 export class StockHistoryModule {
   timeSeriesMap: Map<string, StockDetails>;
 
-  constructor(intraday: Intraday) {
+  constructor(@Inject('intraday') intraday: Intraday) {
     this.timeSeriesMap = new Map<string, StockDetails>();
     this.createHistoryMap(intraday);
     console.log(this.timeSeriesMap);

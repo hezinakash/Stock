@@ -1,5 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+export interface GlobalQuote {
+  'Global Quote': StockStatus;
+}
 
 export interface StockStatus {
   '01. symbol': string;
@@ -14,17 +18,13 @@ export interface StockStatus {
   '10. change percent': string;
 }
 
-export interface GlobalQuote {
-  'Global Quote': StockStatus;
-}
-
-
 @NgModule({
   declarations: [],
   imports: [
     CommonModule
-  ]
+  ],
 })
+
 export class StockStatusModule {
   symbol: string;
   open: number;
@@ -37,7 +37,11 @@ export class StockStatusModule {
   change: number;
   change_percent: number;
 
-  constructor(status: StockStatus) {
+  constructor(@Inject('status') status: StockStatus) {
+    this.setData(status);
+  }
+
+  setData(status: StockStatus) {
     if (status) {
       this.symbol = status['01. symbol'];
       this.open = status['02. open'];
