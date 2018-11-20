@@ -1,8 +1,8 @@
 import { StockDetails } from './../../modules/stock-history/stock-history/stock-history.module';
 import { StockStatusModule } from 'src/app/modules/stock-status/stock-status/stock-status.module';
 import { AlpaVantageService } from './../../services/alpaVantage-service/alpa-vantage.service';
-import { Component, OnInit, Input } from '@angular/core';
-import { interval, Observable } from 'rxjs';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { interval, Observable, Subscription } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 import { StockHistoryModule } from 'src/app/modules/stock-history/stock-history/stock-history.module';
 import { Chart } from 'angular-highcharts';
@@ -16,7 +16,7 @@ const HISTORY_INTERVAL = 60 * 60 * 1000;
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.scss']
 })
-export class StockComponent implements OnInit {
+export class StockComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-input-rename
   @Input('symbol') symbol: string;
   // tslint:disable-next-line:no-input-rename
@@ -28,6 +28,8 @@ export class StockComponent implements OnInit {
   stockChart: Chart;
   status_interval: Observable<StockStatusModule>;
   history_interval: Observable<StockHistoryModule>;
+  status_subscrptions: Subscription;
+  history_subscription: Subscription;
 
   constructor(private service: AlpaVantageService) {}
 
@@ -36,16 +38,22 @@ export class StockComponent implements OnInit {
     this.setHistoryInterval();
   }
 
+  ngOnDestroy() {
+    this.status_subscrptions.unsubscribe();
+    this.history_subscription.unsubscribe();
+  }
+
   setStatusInterval() {
     this.status_interval = interval(STATUS_INTERVAL).pipe(
       startWith(0),
       switchMap(() => this.service.getStatus(this.symbol))
     );
 
-    this.status_interval.subscribe(stock => 
+    this.status_subscrptions = this.status_interval.subscribe(stock =>
       this.updateStockStatus(stock),
       err => console.log(err)
       );
+
   }
 
   updateStockStatus(update: StockStatusModule) {
@@ -60,7 +68,7 @@ export class StockComponent implements OnInit {
       switchMap(() => this.service.getHistory(this.symbol))
     );
 
-    this.history_interval.subscribe(
+    this.history_subscription = this.history_interval.subscribe(
       history => this.updateChart(history),
       err => console.log(err)
       );
