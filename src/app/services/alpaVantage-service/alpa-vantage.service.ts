@@ -1,8 +1,8 @@
-import { Intraday, StockHistoryModule } from './../../modules/stock-history/stock-history/stock-history.module';
+import { Intraday, StockHistory } from './../../models/stock-history';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, retry } from 'rxjs/operators';
-import { StockStatusModule, GlobalQuote } from 'src/app/modules/stock-status/stock-status/stock-status.module';
+import { map } from 'rxjs/operators';
+import { StockStatus, GlobalQuote } from './../../models/stock-status';
 import { Observable } from 'rxjs';
 
 
@@ -16,11 +16,11 @@ const API_KEY = 'V9VZOXL8HM3GLHSH';
 export class AlpaVantageService {
 
   queryUrl = 'https://www.alphavantage.co/query?';
-  history_interval = '60min';
+  historyInterval = '60min';
 
   constructor(private http: HttpClient) { }
 
-  getStatus(symbol: string): Observable<StockStatusModule> {
+  getStatus(symbol: string): Observable<StockStatus> {
     // tslint:disable-next-line:prefer-const
     const statusUrl = `${this.queryUrl}function=${STATUS_FUNC}&symbol=${symbol}&apikey=${API_KEY}`;
 
@@ -30,26 +30,24 @@ export class AlpaVantageService {
                         if (!(res && res['Global Quote'])) {
                         throw new Error(res['Note']);
                         } else {
-                          return new StockStatusModule(res['Global Quote']);
+                          return new StockStatus(res['Global Quote']);
                         }
-                      }),
-                      retry(2)
+                      })
                       );
   }
 
-  getHistory(symbol: string): Observable<StockHistoryModule> {
+  getHistory(symbol: string): Observable<StockHistory> {
     // tslint:disable-next-line:max-line-length
-    const historyUrl = `${this.queryUrl}function=${HISTORY_FUNC}&symbol=${symbol}&interval=${this.history_interval}&apikey=${API_KEY}`;
+    const historyUrl = `${this.queryUrl}function=${HISTORY_FUNC}&symbol=${symbol}&interval=${this.historyInterval}&apikey=${API_KEY}`;
 
     return this.http.get<Intraday>(historyUrl).pipe(
                     map((res: Intraday) =>  {
                         if (res['Note']) {
                           throw new Error(res['Note']);
                         } else {
-                          return new StockHistoryModule(res);
+                          return new StockHistory(res);
                         }
-                    }),
-                    retry(2)
+                    })
                   );
   }
 }

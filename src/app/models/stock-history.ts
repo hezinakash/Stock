@@ -1,41 +1,34 @@
-import { NgModule, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Inject } from '@angular/core';
 
 export interface MetaData {
-  '1. Information': string;
-  '2. Symbol': string;
-  '3. Last Refreshed': string;
-  '4. Interval': string;
-  '5. Output Size': string;
-  '6. Time Zone': string;
-}
+    '1. Information': string;
+    '2. Symbol': string;
+    '3. Last Refreshed': string;
+    '4. Interval': string;
+    '5. Output Size': string;
+    '6. Time Zone': string;
+  }
 
-export interface StockDetails {
-  '1. open': number;
-  '2. high': number;
-  '3. low': number;
-  '4. close': number;
-  '5. volume': number;
-}
+  export interface StockDetails {
+    '1. open': number;
+    '2. high': number;
+    '3. low': number;
+    '4. close': number;
+    '5. volume': number;
+  }
 
-export interface Intraday {
-  'Meta Data': MetaData;
-  'Time Series (60min)': any;
-}
+  export interface Intraday {
+    'Meta Data': MetaData;
+    'Time Series (60min)': any;
+  }
 
-const LAST_HOURS = 6;
-const ONE_HOUR = 60 * 60 * 1000;
-const TIME_SERIES = 'Time Series (60min)';
-const META_DATA = 'Meta Data';
+  const LAST_HOURS = 6;
+  const ONE_HOUR = 60 * 60 * 1000;
+  const TIME_SERIES = 'Time Series (60min)';
+  const META_DATA = 'Meta Data';
 
-@NgModule({
-  declarations: [],
-  imports: [CommonModule]
-})
-
-
-export class StockHistoryModule {
-  timeSeriesMap: Map<string, StockDetails>;
+export class StockHistory {
+    timeSeriesMap: Map<string, StockDetails>;
 
   constructor(@Inject('intraday') intraday: Intraday) {
     this.timeSeriesMap = new Map<string, StockDetails>();
@@ -44,7 +37,7 @@ export class StockHistoryModule {
 
   createHistoryMap(intraday: Intraday) {
     console.log(intraday);
-    
+
     if (intraday && intraday[META_DATA] && intraday[TIME_SERIES]) {
       const lastDateStr = intraday[META_DATA]['3. Last Refreshed'];
       const lastDate = new Date(lastDateStr);

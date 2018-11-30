@@ -1,10 +1,9 @@
-import { StockDetails } from './../../modules/stock-history/stock-history/stock-history.module';
-import { StockStatusModule } from 'src/app/modules/stock-status/stock-status/stock-status.module';
+import { StockStatus } from './../../models/stock-status';
 import { AlpaVantageService } from './../../services/alpaVantage-service/alpa-vantage.service';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { interval, Observable, Subscription } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
-import { StockHistoryModule } from 'src/app/modules/stock-history/stock-history/stock-history.module';
+import { StockHistory, StockDetails } from './../../models/stock-history';
 import { Chart } from 'angular-highcharts';
 
 const STATUS_INTERVAL = 60 * 1000;
@@ -26,10 +25,10 @@ export class StockComponent implements OnInit, OnDestroy {
   trend: number;
   precent: number;
   stockChart: Chart;
-  status_interval: Observable<StockStatusModule>;
-  history_interval: Observable<StockHistoryModule>;
-  status_subscrptions: Subscription;
-  history_subscription: Subscription;
+  statusInterval: Observable<StockStatus>;
+  historyInterval: Observable<StockHistory>;
+  statusSubscrptions: Subscription;
+  historySubscription: Subscription;
 
   constructor(private service: AlpaVantageService) {}
 
@@ -39,42 +38,42 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.status_subscrptions.unsubscribe();
-    this.history_subscription.unsubscribe();
+    this.statusSubscrptions.unsubscribe();
+    this.historySubscription.unsubscribe();
   }
 
   setStatusInterval() {
-    this.status_interval = interval(STATUS_INTERVAL).pipe(
+    this.statusInterval = interval(STATUS_INTERVAL).pipe(
       startWith(0),
       switchMap(() => this.service.getStatus(this.symbol))
     );
 
-    this.status_subscrptions = this.status_interval.subscribe(stock =>
+    this.statusSubscrptions = this.statusInterval.subscribe(stock =>
       this.updateStockStatus(stock),
       err => console.log(err)
       );
 
   }
 
-  updateStockStatus(update: StockStatusModule) {
+  updateStockStatus(update: StockStatus) {
     this.value = update.price;
     this.trend = update.change;
-    this.precent = update.change_percent;
+    this.precent = update.changePercent;
   }
 
   setHistoryInterval() {
-    this.history_interval = interval(HISTORY_INTERVAL).pipe(
+    this.historyInterval = interval(HISTORY_INTERVAL).pipe(
       startWith(0),
       switchMap(() => this.service.getHistory(this.symbol))
     );
 
-    this.history_subscription = this.history_interval.subscribe(
+    this.historySubscription = this.historyInterval.subscribe(
       history => this.updateChart(history),
       err => console.log(err)
       );
   }
 
-  updateChart(history: StockHistoryModule) {
+  updateChart(history: StockHistory) {
     const details = this.getStockHistoryDetails(history);
 
     this.stockChart = new Chart({
@@ -108,7 +107,7 @@ export class StockComponent implements OnInit, OnDestroy {
     });
   }
 
-  getStockHistoryDetails(history: StockHistoryModule) {
+  getStockHistoryDetails(history: StockHistory) {
     const details = [];
 
     history.timeSeriesMap.forEach((data: StockDetails, timeStamp: string) => {
