@@ -1,9 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 
-body{
-    background-image: url('./assets/images/hd-backgrund.jpg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+html,
+body {
+  background-image: url("./assets/images/chart-black-white.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+@media screen and (orientation: landscape) {
+  html,
+  body {
+    height: 100vw;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  html,
+  body {
     height: 100vh;
+  }
 }

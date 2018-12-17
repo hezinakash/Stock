@@ -1,25 +1,25 @@
-import { StockStatus } from './../../models/stock-status';
-import { AlpaVantageService } from './../../services/alpaVantage-service/alpa-vantage.service';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { interval, Observable, Subscription } from 'rxjs';
-import { startWith, switchMap } from 'rxjs/operators';
-import { StockHistory, StockDetails } from './../../models/stock-history';
-import { Chart } from 'angular-highcharts';
+import { StockStatus } from "./../../models/stock-status";
+import { AlpaVantageService } from "./../../services/alpaVantage-service/alpa-vantage.service";
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { interval, Observable, Subscription } from "rxjs";
+import { startWith, switchMap } from "rxjs/operators";
+import { StockHistory, StockDetails } from "./../../models/stock-history";
+import { Chart } from "angular-highcharts";
 
 const STATUS_INTERVAL = 60 * 1000;
 const HISTORY_INTERVAL = 60 * 60 * 1000;
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'stock',
-  templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.scss']
+  selector: "stock",
+  templateUrl: "./stock.component.html",
+  styleUrls: ["./stock.component.scss"]
 })
 export class StockComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-input-rename
-  @Input('symbol') symbol: string;
+  @Input("symbol") symbol: string;
   // tslint:disable-next-line:no-input-rename
-  @Input('name') name: string;
+  @Input("name") name: string;
 
   value: number;
   trend: number;
@@ -48,11 +48,10 @@ export class StockComponent implements OnInit, OnDestroy {
       switchMap(() => this.service.getStatus(this.symbol))
     );
 
-    this.statusSubscrptions = this.statusInterval.subscribe(stock =>
-      this.updateStockStatus(stock),
+    this.statusSubscrptions = this.statusInterval.subscribe(
+      stock => this.updateStockStatus(stock),
       err => console.log(err)
-      );
-
+    );
   }
 
   updateStockStatus(update: StockStatus) {
@@ -70,7 +69,7 @@ export class StockComponent implements OnInit, OnDestroy {
     this.historySubscription = this.historyInterval.subscribe(
       history => this.updateChart(history),
       err => console.log(err)
-      );
+    );
   }
 
   updateChart(history: StockHistory) {
@@ -78,16 +77,16 @@ export class StockComponent implements OnInit, OnDestroy {
 
     this.stockChart = new Chart({
       chart: {
-        zoomType: 'x',
-        height: '65%',
-        width: 130
+        zoomType: "x",
+        height: "100%",
+        width: 150
       },
       xAxis: {
-        type: 'datetime',
+        type: "datetime",
         visible: false
       },
       title: {
-        text: ''
+        text: ""
       },
       yAxis: {
         visible: false
@@ -100,7 +99,7 @@ export class StockComponent implements OnInit, OnDestroy {
       },
       series: [
         {
-          name: 'Rate',
+          name: "Rate",
           data: details
         }
       ]
@@ -113,7 +112,7 @@ export class StockComponent implements OnInit, OnDestroy {
     history.timeSeriesMap.forEach((data: StockDetails, timeStamp: string) => {
       if (timeStamp && data) {
         const date = new Date(timeStamp);
-      details.push([date.getTime(), +data['4. close']]);
+        details.push([date.getTime(), +data["4. close"]]);
       }
     });
 

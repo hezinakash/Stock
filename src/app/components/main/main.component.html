@@ -1,0 +1,38 @@
+<mat-toolbar class="primary"> <span>Stocks</span> </mat-toolbar>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-10 col-md-6 col-lg-4 mx-auto mx-lg-0 ml-lg-auto">
+      <mat-select
+        multiple
+        placeholder="Select stocks"
+        (selectionChange)="onSelect($event)"
+        class="stocksSelect"
+      >
+        <mat-option *ngFor="let stock of stocks; let i = index" [value]="i">
+          {{ stock.name }}
+        </mat-option>
+      </mat-select>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4 stocks-container">
+  <div class="row">
+    <div class="col-10 col-xl-12 mx-auto">
+      <div class="row stocks">
+        <h1 *ngIf="selectedStocks.length === 0; else: display_stocks">
+          Please select stocks...
+        </h1>
+        <ng-template #display_stocks>
+          <div
+            class="col-12 col-md-6 col-xl-4 mx-xs-auto"
+            *ngFor="let stock of selectedStocks"
+          >
+            <stock [symbol]="stock.symbol" [name]="stock.name"> </stock>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

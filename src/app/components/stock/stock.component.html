@@ -1,12 +1,16 @@
-<div class="stock d-flex">
-    <div class="details d-flex flex-column">
-      <div class="name">{{ name }}</div>
-      <div class="value">{{ value | number: '1.0-3' }}</div>
-      <div class="trend" [class.neggative]="trend < 0">
-        {{ trend | number: '1.0-3' }} ({{ precent | number: '1.0-2' }}%)
-      </div>
+<div class="stock d-flex flex-column flex-lg-row">
+  <div class="details d-flex flex-column">
+    <div class="name mx-auto">{{ name }}</div>
+    <div class="curr-value">
+      <label class="label">Value: </label>
+      <label class="value"> {{ value | number: "1.0-3" }}</label>
     </div>
-    <div class="chart">
-      <div [chart]="stockChart"></div>
+    <div class="trend" [class.neggative]="trend < 0">
+      <label class="label">Trend: </label>
+      <label class="value">
+        {{ trend | number: "1.0-3" }} ({{ precent | number: "1.0-2" }}%)
+      </label>
     </div>
   </div>
+  <div class="chart mx-auto"><div [chart]="stockChart"></div></div>
+</div>

@@ -1,45 +1,43 @@
-import { Inject } from '@angular/core';
+import { Inject } from "@angular/core";
 
 export interface MetaData {
-    '1. Information': string;
-    '2. Symbol': string;
-    '3. Last Refreshed': string;
-    '4. Interval': string;
-    '5. Output Size': string;
-    '6. Time Zone': string;
-  }
+  "1. Information": string;
+  "2. Symbol": string;
+  "3. Last Refreshed": string;
+  "4. Interval": string;
+  "5. Output Size": string;
+  "6. Time Zone": string;
+}
 
-  export interface StockDetails {
-    '1. open': number;
-    '2. high': number;
-    '3. low': number;
-    '4. close': number;
-    '5. volume': number;
-  }
+export interface StockDetails {
+  "1. open": number;
+  "2. high": number;
+  "3. low": number;
+  "4. close": number;
+  "5. volume": number;
+}
 
-  export interface Intraday {
-    'Meta Data': MetaData;
-    'Time Series (60min)': any;
-  }
+export interface Intraday {
+  "Meta Data": MetaData;
+  "Time Series (60min)": any;
+}
 
-  const LAST_HOURS = 6;
-  const ONE_HOUR = 60 * 60 * 1000;
-  const TIME_SERIES = 'Time Series (60min)';
-  const META_DATA = 'Meta Data';
+const LAST_HOURS = 6;
+const ONE_HOUR = 60 * 60 * 1000;
+const TIME_SERIES = "Time Series (60min)";
+const META_DATA = "Meta Data";
 
 export class StockHistory {
-    timeSeriesMap: Map<string, StockDetails>;
+  timeSeriesMap: Map<string, StockDetails>;
 
-  constructor(@Inject('intraday') intraday: Intraday) {
+  constructor(@Inject("intraday") intraday: Intraday) {
     this.timeSeriesMap = new Map<string, StockDetails>();
     this.createHistoryMap(intraday);
   }
 
   createHistoryMap(intraday: Intraday) {
-    console.log(intraday);
-
     if (intraday && intraday[META_DATA] && intraday[TIME_SERIES]) {
-      const lastDateStr = intraday[META_DATA]['3. Last Refreshed'];
+      const lastDateStr = intraday[META_DATA]["3. Last Refreshed"];
       const lastDate = new Date(lastDateStr);
       this.fillMap(intraday, lastDate);
     }
@@ -49,15 +47,16 @@ export class StockHistory {
     for (let hour = LAST_HOURS; hour > 0; hour--) {
       const timeStamp = new Date(lastDate.getTime() - hour * ONE_HOUR);
       const timeByFormat = this.getTimeByFormat(timeStamp);
-      this.timeSeriesMap.set(
-        timeByFormat,
-        intraday[TIME_SERIES][timeByFormat]
-      );
+      this.timeSeriesMap.set(timeByFormat, intraday[TIME_SERIES][timeByFormat]);
     }
   }
 
   getTimeByFormat(date: Date) {
     // tslint:disable-next-line:max-line-length
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}:${('0' + date.getSeconds()).slice(-2)}`;
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${(
+      "0" + date.getHours()
+    ).slice(-2)}:${("0" + date.getMinutes()).slice(-2)}:${(
+      "0" + date.getSeconds()
+    ).slice(-2)}`;
   }
 }

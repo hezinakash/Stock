@@ -1,46 +1,59 @@
-
 .stock {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
-    -webkit-box-shadow: 0 0 10px 0px #727171;
-            box-shadow: 0 0 10px 0px #727171;
-    margin-bottom: 10px;
-    background: #dcdcdc;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.4rem;
+  -webkit-box-shadow: 0 0 10px 0px #727171;
+  box-shadow: 0 0 10px 0px #727171;
+  margin-bottom: 10px;
+  background: #dcdcdc;
 }
 
-.details, 
+.details,
 .chart {
-    margin: 5px;
-}
-
-.chart {
-    margin-left: auto;
+  margin: 5px;
 }
 
 @mixin text-style($weight, $color) {
-    font-weight: $weight;
-    color: $color;
+  font-weight: $weight;
+  color: $color;
 }
 
 .name {
-    margin-bottom: 2px;
-    @include text-style(500, #33a2ff);
-    font-size: .9rem;
+  @include text-style(bold, #000);
 }
 
-.value {
-    @include text-style(500, black);
-    margin-top: auto;
-    font-size: .8rem;
+.details label {
+  @include text-style(400, #000);
+  font-size: 0.75rem;
+  margin-right: 5px;
+}
+
+.curr-value {
+  margin-top: auto;
+}
+
+.curr-value,
+.trend {
+  white-space: nowrap;
+}
+
+.curr-value .value {
+  @include text-style(500, black);
+  font-size: 0.85rem;
 }
 
 .trend {
-    font-size: .75rem;
+  .value {
+    font-size: 0.85rem;
     white-space: nowrap;
     @include text-style(500, green);
-    
-    &.neggative {
-        color: red;
-    }
+  }
+
+  &.neggative .value {
+    color: red;
+  }
+}
+
+:host /deep/::ng-deep .highcharts-container {
+  margin: 0 auto;
 }
